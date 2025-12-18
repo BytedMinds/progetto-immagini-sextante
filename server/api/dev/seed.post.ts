@@ -9,6 +9,37 @@ export default defineEventHandler(async (event) => {
 
     const password = await hashPassword('password123')
 
+    // 0. Seed Plans
+    const freePlan = await prisma.plan.upsert({
+        where: { name: 'Free' },
+        update: {},
+        create: {
+            name: 'Free',
+            price: 0,
+            features: ['Basic Tools', '5 Credits/Mo', 'Standard Support']
+        }
+    })
+
+    const proPlan = await prisma.plan.upsert({
+        where: { name: 'Pro' },
+        update: {},
+        create: {
+            name: 'Pro',
+            price: 1999, // $19.99
+            features: ['All Tools', '50 Credits/Mo', 'Priority Support', 'No Watermark']
+        }
+    })
+
+    const entPlan = await prisma.plan.upsert({
+        where: { name: 'Enterprise' },
+        update: {},
+        create: {
+            name: 'Enterprise',
+            price: 9900,
+            features: ['Unlimited', 'API Access', 'Dedicated Account Manager']
+        }
+    })
+
     // 1. Create Admin
     const admin = await prisma.user.upsert({
         where: { email: 'admin@sextante.app' },
@@ -33,7 +64,7 @@ export default defineEventHandler(async (event) => {
             subscription: {
                 create: {
                     status: 'ACTIVE',
-                    plan: 'PRO',
+                    planId: proPlan.id,
                     stripeSubId: 'dev_mock_sub_001',
                     currentPeriodEnd: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
                 }
@@ -41,5 +72,5 @@ export default defineEventHandler(async (event) => {
         }
     })
 
-    return { success: true, admin, user }
+    return { success: true, admin, user, plans: [freePlan, proPlan, entPlan] }
 })

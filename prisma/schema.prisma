@@ -23,11 +23,6 @@ enum SubscriptionStatus {
   TRIALING
 }
 
-enum PlanType {
-  FREE
-  PRO
-  ENTERPRISE
-}
 
 model User {
   id               String        @id @default(uuid())
@@ -47,12 +42,33 @@ model User {
   @@map("users")
 }
 
+model Plan {
+  id            String         @id @default(uuid())
+  name          String         @unique
+  description   String?
+  price         Int            @default(0) // cents
+  currency      String         @default("USD")
+  interval      String         @default("month") // "month" | "year"
+  stripePriceId String?
+  features      String[]       // List of features
+  
+  subscriptions Subscription[]
+  
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@map("plans")
+}
+
 model Subscription {
   id               String             @id @default(uuid())
   userId           String             @unique
   user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   stripeSubId      String             @unique
-  plan             PlanType           @default(FREE)
+  
+  planId           String
+  plan             Plan               @relation(fields: [planId], references: [id])
+  
   status           SubscriptionStatus @default(ACTIVE)
   currentPeriodEnd DateTime
   

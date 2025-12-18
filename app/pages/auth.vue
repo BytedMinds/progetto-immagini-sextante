@@ -86,12 +86,15 @@ const handleSubmit = async () => {
       // @ts-ignore
       const token = useCookie('auth_token')
       token.value = data.token
-      
-      useAuth().fetchUser().then(() => {
-         const { isAdmin } = useAuth()
-         if (isAdmin.value) navigateTo('/admin')
-         else navigateTo('/editor')
-      })
+              // Check both local role and fetch fresh user to be sure
+         useAuth().fetchUser().then(() => {
+             const user = useAuth().user.value
+             if (user?.role === 'ADMIN') {
+                 navigateTo('/admin')
+             } else {
+                 navigateTo('/editor')
+             }
+         })
     }
   } catch (e: any) {
     console.error(e)
