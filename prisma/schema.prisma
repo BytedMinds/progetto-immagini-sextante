@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  PAST_DUE
+  INCOMPLETE
+  TRIALING
+}
+
+enum PlanType {
+  FREE
+  PRO
+  ENTERPRISE
+}
+
+model User {
+  id               String        @id @default(uuid())
+  email            String        @unique
+  passwordHash     String
+  fullName         String?
+  role             Role          @default(USER)
+  credits          Int           @default(10) // Free starting credits
+  stripeCustomerId String?       @unique
+  
+  subscription     Subscription?
+  usageLogs        UsageLog[]
+  
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@map("users")
+}
+
+model Subscription {
+  id               String             @id @default(uuid())
+  userId           String             @unique
+  user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stripeSubId      String             @unique
+  plan             PlanType           @default(FREE)
+  status           SubscriptionStatus @default(ACTIVE)
+  currentPeriodEnd DateTime
+  
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  @@map("subscriptions")
+}
+
+model UsageLog {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  serviceType String   // e.g., "enhance", "denoise"
+  cost        Int      // Credit cost
+  metadata    Json?    // Store params used
+  
+  timestamp   DateTime @default(now())
+
+  @@map("usage_logs")
+}
+
+model Otp {
+  id        String   @id @default(uuid())
+  email     String
+  code      String
+  type      OtpType
+  expiresAt DateTime
+  verified  Boolean  @default(false)
+  
+  createdAt DateTime @default(now())
+
+  @@map("otps")
+}
+
+enum OtpType {
+  REGISTER
+  LOGIN
+  PASSWORD_RESET
+}

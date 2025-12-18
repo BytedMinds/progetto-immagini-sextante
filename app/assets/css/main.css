@@ -1,0 +1,28 @@
+@import './variables.css';
+@import './base.css';
+
+/* Utility/Global helper classes can go here if generic, 
+   but specific component styles should use Vue scoped styles or CSS modules */
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, var(--color-primary), #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity var(--duration-normal) var(--ease-out);
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
