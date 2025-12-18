@@ -1,9 +1,8 @@
 import { prisma } from '../../utils/prisma';
+import { requireAdmin } from '../../utils/protect';
 
 export default defineEventHandler(async (event) => {
-    // TODO: Add proper Role middleware check
-    // For now, we assume the frontend handles visibility, but backend should ideally verify JWT role.
-    // const user = event.context.user; if (user.role !== 'ADMIN') ...
+    requireAdmin(event);
 
     const [userCount, users] = await Promise.all([
         prisma.user.count(),

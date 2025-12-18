@@ -34,12 +34,5 @@ definePageMeta({
 </script>
 
 <style scoped>
-.container-padded {
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.p-6 { padding: 1.5rem; }
-.rounded-xl { border-radius: 0.75rem; }
-.mt-8 { margin-top: 2rem; }
+/* Global styles in main.css handle layout */
 </style>

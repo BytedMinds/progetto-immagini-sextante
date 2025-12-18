@@ -1,7 +1,8 @@
 import { prisma } from '../../utils/prisma';
+import { requireAdmin } from '../../utils/protect';
 
 export default defineEventHandler(async (event) => {
-    // TODO: Add proper Role middleware check
+    requireAdmin(event);
 
     const users = await prisma.user.findMany({
         select: {
@@ -9,7 +10,7 @@ export default defineEventHandler(async (event) => {
             email: true,
             role: true,
             createdAt: true,
-            Subscription: {
+            subscription: {
                 select: {
                     status: true,
                     plan: true
@@ -18,8 +19,7 @@ export default defineEventHandler(async (event) => {
         },
         orderBy: {
             createdAt: 'desc'
-        },
-        take: 50 // Limit for now
+        }
     });
 
     return {

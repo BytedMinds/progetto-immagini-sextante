@@ -24,7 +24,7 @@
           <NuxtLink to="/admin/users" class="nav-item" active-class="active">
             <Users :size="20" /> Users
           </NuxtLink>
-           <NuxtLink to="/admin" class="nav-item" active-class="active">
+           <NuxtLink to="/admin/billing" class="nav-item" active-class="active">
             <CreditCard :size="20" /> Billing
           </NuxtLink>
         </template>

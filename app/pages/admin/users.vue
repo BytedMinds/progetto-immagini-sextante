@@ -66,12 +66,7 @@ const users = computed(() => data.value?.users || [])
 </script>
 
 <style scoped>
-.container-padded {
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
+/* Scoped styles removed in favor of global utilities in main.css */
 .badge {
   padding: 0.25rem 0.6rem;
   border-radius: 999px;

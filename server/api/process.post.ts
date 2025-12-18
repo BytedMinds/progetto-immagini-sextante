@@ -1,9 +1,10 @@
 import { pipelineOrchestrator } from '../core/pipeline';
 import { prisma } from '../utils/prisma';
+import { requireUser } from '../utils/protect';
 
 export default defineEventHandler(async (event) => {
-    // 1. Auth Check (TODO: Middleware should handle this, but checking context here)
-    // const user = event.context.user; if ( !user ) ...
+    // 1. Auth Check - Require any logged in user
+    requireUser(event);
 
     const body = await readBody(event);
     const { imageUrl, steps } = body;

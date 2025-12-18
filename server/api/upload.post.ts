@@ -1,6 +1,9 @@
 import { storageProvider } from '../core/storage';
+import { requireUser } from '../utils/protect';
 
 export default defineEventHandler(async (event) => {
+    requireUser(event);
+
     // Use H3's readMultipartFormData
     const files = await readMultipartFormData(event);
 
