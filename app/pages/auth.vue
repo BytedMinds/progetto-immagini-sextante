@@ -77,29 +77,33 @@ const handleSubmit = async () => {
   loading.value = true
   try {
     const endpoint = isLogin.value ? '/api/auth/login' : '/api/auth/register'
-    const { data, error } = await useFetch(endpoint, {
+    const data: any = await $fetch(endpoint, {
       method: 'POST',
       body: { email: email.value, password: password.value },
     })
 
-    if (error.value) {
-      alert(error.value.statusMessage || 'Error')
-    } else if (data.value) {
+    if (data && data.token) {
       // @ts-ignore
-      const token = data.value.token
-      localStorage.setItem('auth_token', token)
-      navigateTo('/editor')
+      const token = useCookie('auth_token')
+      token.value = data.token
+      
+      useAuth().fetchUser().then(() => {
+         const { isAdmin } = useAuth()
+         if (isAdmin.value) navigateTo('/admin')
+         else navigateTo('/editor')
+      })
     }
-  } catch (e) {
+  } catch (e: any) {
     console.error(e)
+    alert(e.statusMessage || 'An error occurred')
   } finally {
     loading.value = false
   }
 }
 
-// Auth likely uses default layout (which has Navbar), or a blank one.
-// The default layout has a navbar "Sign In" button which might look weird if we are on Auth page.
-// But it's fine for now.
+definePageMeta({
+  middleware: ['guest']
+})
 </script>
 
 <style scoped>

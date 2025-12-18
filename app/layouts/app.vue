@@ -6,15 +6,28 @@
       </div>
       
       <div class="sidebar-nav">
-        <NuxtLink to="/editor" class="nav-item" active-class="active">
-          <Wand2 :size="20" /> Editor
-        </NuxtLink>
-        <NuxtLink to="/admin" class="nav-item" active-class="active">
-          <BarChart3 :size="20" /> Dashboard
-        </NuxtLink>
-        <NuxtLink to="/settings" class="nav-item" active-class="active">
-          <Settings :size="20" /> Settings
-        </NuxtLink>
+        <!-- User Menu -->
+        <template v-if="!isAdmin">
+          <NuxtLink to="/editor" class="nav-item" active-class="active">
+            <Wand2 :size="20" /> Editor
+          </NuxtLink>
+           <NuxtLink to="/settings" class="nav-item" active-class="active">
+            <Settings :size="20" /> Settings
+          </NuxtLink>
+        </template>
+
+        <!-- Admin Menu -->
+        <template v-else>
+          <NuxtLink to="/admin" class="nav-item" active-class="active">
+            <BarChart3 :size="20" /> Dashboard
+          </NuxtLink>
+          <NuxtLink to="/admin/users" class="nav-item" active-class="active">
+            <Users :size="20" /> Users
+          </NuxtLink>
+           <NuxtLink to="/admin" class="nav-item" active-class="active">
+            <CreditCard :size="20" /> Billing
+          </NuxtLink>
+        </template>
       </div>
 
       <div class="sidebar-footer">
@@ -31,11 +44,12 @@
 </template>
 
 <script setup lang="ts">
-import { Wand2, BarChart3, Settings, LogOut } from 'lucide-vue-next'
+import { Wand2, BarChart3, Settings, LogOut, Users, CreditCard } from 'lucide-vue-next'
+
+const { logout, isAdmin } = useAuth()
 
 const handleLogout = () => {
-  localStorage.removeItem('auth_token')
-  navigateTo('/auth')
+  logout()
 }
 </script>
 

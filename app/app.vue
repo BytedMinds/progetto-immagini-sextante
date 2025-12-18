@@ -4,6 +4,14 @@
   </NuxtLayout>
 </template>
 
+<script setup lang="ts">
+const { fetchUser } = useAuth()
+
+onMounted(() => {
+  fetchUser()
+})
+</script>
+
 <style>
 /* Global Transition */
 .page-enter-active,

@@ -65,10 +65,13 @@
 const { data: stats } = await useFetch('/api/admin/stats')
 const { data: userData } = await useFetch('/api/admin/users')
 const users = computed(() => userData.value?.users || [])
+// Use mock values for now if totalUsers missing
+const totalUsers = computed(() => users.value.length || 0)
+const totalSubs = computed(() => users.value.filter((u:any) => u.subscription?.status === 'ACTIVE').length || 0)
 
 definePageMeta({
-  layout: 'app'
-  // middleware: 'admin' // TODO: Implement admin middleware
+  layout: 'app',
+  middleware: ['auth', 'admin']
 })
 </script>
 
