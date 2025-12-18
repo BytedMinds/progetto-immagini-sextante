@@ -1,9 +1,9 @@
 <template>
   <div class="admin-dashboard container-padded">
     <header class="mb-8">
-      <h1 class="text-2xl font-bold mb-2">Admin Dashboard</h1>
-      <div class="actions">
-        <NuxtLink to="/editor" class="btn-text">Back to Editor</NuxtLink>
+      <div>
+        <h1 class="text-2xl font-bold mb-2">Dashboard</h1>
+        <p class="text-muted">Overview of platform performance.</p>
       </div>
     </header>
 
