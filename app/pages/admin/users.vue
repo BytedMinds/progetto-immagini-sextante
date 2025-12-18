@@ -5,10 +5,11 @@
         <h1 class="text-2xl font-bold mb-2">User Management</h1>
         <p class="text-muted">View and manage all registered users.</p>
       </div>
-      <button class="btn-primary">Add User</button>
+      <button class="btn-primary" @click="addUser">Add User</button>
     </header>
 
     <div class="users-table-wrapper glass-panel rounded-xl overflow-hidden">
+      <!-- ... (Table remains the same) ... -->
       <table class="w-full text-left">
         <thead class="bg-white/5 border-b border-white/5">
           <tr>
@@ -22,14 +23,9 @@
         <tbody class="divide-y divide-white/5">
           <tr v-for="user in users" :key="user.id" class="hover:bg-white/5 transition-colors">
             <td class="p-4">
-              <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full bg-primary/20 flex-center text-primary font-bold text-xs">
-                  {{ user.email[0].toUpperCase() }}
-                </div>
-                <div>
-                  <div class="font-medium">{{ user.fullName || 'No Name' }}</div>
-                  <div class="text-xs text-muted">{{ user.email }}</div>
-                </div>
+              <div>
+                <div class="font-medium">{{ user.fullName || 'No Name' }}</div>
+                <div class="text-xs text-muted">{{ user.email }}</div>
               </div>
             </td>
             <td class="p-4">
@@ -45,24 +41,66 @@
               {{ new Date(user.createdAt).toLocaleDateString() }}
             </td>
             <td class="p-4">
-              <button class="text-muted hover:text-white transition-colors">Edit</button>
+              <button class="text-muted hover:text-white transition-colors" @click="editUser(user)">Edit</button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
+
+    <!-- Modal -->
+    <UserModal v-model="showModal" :user="editingUser" @save="handleSave" />
   </div>
 </template>
 
 <script setup lang="ts">
+import UserModal from '~/components/admin/UserModal.vue'
+
 definePageMeta({
   layout: 'app',
   middleware: ['auth', 'admin']
 })
 
-const { data } = await useFetch('/api/admin/users')
+const { data, refresh } = await useFetch('/api/admin/users')
 // @ts-ignore
 const users = computed(() => data.value?.users || [])
+
+const showModal = ref(false)
+const editingUser = ref(null)
+
+const addUser = () => {
+    editingUser.value = null
+    showModal.value = true
+}
+
+const editUser = (user: any) => {
+    editingUser.value = user
+    showModal.value = true
+}
+
+const handleSave = async (formData: any) => {
+    try {
+        if (formData.id) {
+            // Edit
+            await $fetch(`/api/admin/users/${formData.id}`, {
+                method: 'PUT',
+                body: formData
+            })
+        } else {
+            // Create
+            await $fetch('/api/admin/users', {
+                method: 'POST',
+                body: formData
+            })
+        }
+        // Refresh list
+        await refresh()
+    } catch (e: any) {
+        alert(e.statusMessage || 'Error saving user')
+        throw e // Re-throw to keep modal open if needed, but handled inside validation usually.
+                // For now, simple alert.
+    }
+}
 </script>
 
 <style scoped>
