@@ -119,7 +119,7 @@ const handleLogout = () => {
 
 .app-content {
   flex: 1;
-  padding: var(--space-8);
   overflow-x: hidden;
+  /* padding removed for full-width editor */
 }
 </style>

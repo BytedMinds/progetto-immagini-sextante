@@ -1,7 +1,7 @@
 <template>
-  <div class="admin-dashboard">
-    <header class="dashboard-header">
-      <h1>Admin Dashboard</h1>
+  <div class="admin-dashboard container-padded">
+    <header class="mb-8">
+      <h1 class="text-2xl font-bold mb-2">Admin Dashboard</h1>
       <div class="actions">
         <NuxtLink to="/editor" class="btn-text">Back to Editor</NuxtLink>
       </div>
@@ -73,8 +73,11 @@ definePageMeta({
 </script>
 
 <style scoped>
-.admin-dashboard {
+.container-padded {
   padding: 2rem;
+}
+
+.admin-dashboard {
   max-width: 1200px;
   margin: 0 auto;
 }

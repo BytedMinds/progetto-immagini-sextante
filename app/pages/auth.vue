@@ -44,6 +44,19 @@
           <a href="#" @click.prevent="isLogin = true">Sign in</a>
         </p>
       </div>
+      
+      <!-- Developer Quality of Life -->
+      <div class="dev-tools mt-8 pt-4 border-t border-white/5" v-if="isLogin">
+        <p class="text-xs text-muted mb-2 text-center">Dev Shortcuts</p>
+        <div class="flex gap-2 justify-center">
+           <button class="btn-xs btn-secondary" @click.prevent="fillCreds('admin@sextante.app', 'password123')">
+             Admin
+           </button>
+           <button class="btn-xs btn-secondary" @click.prevent="fillCreds('user@sextante.app', 'password123')">
+             Pro User
+           </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -54,6 +67,11 @@ const isLogin = ref(true)
 const email = ref('')
 const password = ref('')
 const loading = ref(false)
+
+const fillCreds = (e: string, p: string) => {
+  email.value = e
+  password.value = p
+}
 
 const handleSubmit = async () => {
   loading.value = true
@@ -169,4 +187,24 @@ const handleSubmit = async () => {
 .auth-footer a:hover {
   text-decoration: underline;
 }
+
+.dev-tools {
+  text-align: center;
+}
+
+.btn-xs {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  height: auto;
+}
+
+.border-t { border-top-width: 1px; }
+.border-white\/5 { border-color: rgba(255,255,255,0.05); }
+.mt-8 { margin-top: 2rem; }
+.pt-4 { padding-top: 1rem; }
+.text-xs { font-size: 0.75rem; }
+.text-center { text-align: center; }
+.flex { display: flex; }
+.gap-2 { gap: 0.5rem; }
+.justify-center { justify-content: center; }
 </style>
