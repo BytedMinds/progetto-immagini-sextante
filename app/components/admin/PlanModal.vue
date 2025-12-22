@@ -40,7 +40,7 @@
                   </button>
               </div>
               
-              <div class="features-list space-y-2 max-h-48 overflow-y-auto pr-1 customer-scrollbar">
+              <div class="features-scroll-container space-y-2 pr-1 customer-scrollbar">
                   <div v-for="(feat, index) in form.features" :key="index" class="feature-row">
                       <input 
                         v-model="form.features[index]" 
@@ -167,6 +167,8 @@ const handleSubmit = async () => {
   border-radius: 1rem;
   width: 100%;
   max-width: 32rem; 
+  max-height: 90vh; 
+  overflow-y: auto;
   background-color: #1a1a1a;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255,255,255,0.1);
@@ -256,6 +258,11 @@ const handleSubmit = async () => {
 .customer-scrollbar::-webkit-scrollbar-thumb {
     background: rgba(255,255,255,0.1);
     border-radius: 3px;
+}
+
+.features-scroll-container {
+    max-height: 240px; /* ~5 items approx */
+    overflow-y: auto;
 }
 
 .feature-row {
