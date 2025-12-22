@@ -24,6 +24,9 @@
           <NuxtLink to="/admin/users" class="nav-item" active-class="active">
             <Users :size="20" /> Users
           </NuxtLink>
+           <NuxtLink to="/admin/subscriptions" class="nav-item" active-class="active">
+            <Package :size="20" /> Subscriptions
+          </NuxtLink>
            <NuxtLink to="/admin/billing" class="nav-item" active-class="active">
             <CreditCard :size="20" /> Billing
           </NuxtLink>
@@ -44,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { Wand2, BarChart3, Settings, LogOut, Users, CreditCard } from 'lucide-vue-next'
+import { Wand2, BarChart3, Settings, LogOut, Users, CreditCard, Package } from 'lucide-vue-next'
 
 const { logout, isAdmin } = useAuth()
 
