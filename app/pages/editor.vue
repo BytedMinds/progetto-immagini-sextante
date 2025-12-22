@@ -59,7 +59,7 @@ const handleToolApply = async (toolAction: string, params: any) => {
 
 definePageMeta({
   layout: 'app',
-  middleware: ['auth']
+  middleware: ['auth', 'redirect-admin']
 })
 </script>
 
